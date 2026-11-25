@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Varaq — Kitob do'koni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C2541;
+    --ink-soft:#2E3A5C;
+    --brass:#B08D57;
+    --brass-light:#D9BC8B;
+    --parchment:#EDE6D3;
+    --parchment-dark:#E2D8BE;
+    --charcoal:#2B2620;
+    --stamp-red:#A94438;
+    --card-shadow: 0 1px 0 rgba(43,38,32,0.06), 0 8px 20px -10px rgba(28,37,65,0.35);
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--parchment);color:var(--charcoal);font-family:'Source Sans 3',sans-serif;}
+  ::selection{background:var(--brass-light);}
+
+  a{color:inherit;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+
+  /* subtle paper texture */
+  .paper-bg{
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(176,141,87,0.06) 0, transparent 45%),
+      radial-gradient(circle at 80% 60%, rgba(28,37,65,0.05) 0, transparent 40%);
+  }
+
+  header.site{
+    position:sticky; top:0; z-index:40;
+    background:var(--parchment); border-bottom:1px solid rgba(43,38,32,0.15);
+  }
+  .site-bar{display:flex;align-items:center;justify-content:space-between;padding:18px 0;}
+  .wordmark{display:flex;align-items:baseline;gap:10px;}
+  .wordmark .mark{
+    font-family:'Fraunces',serif; font-weight:700; font-size:26px; letter-spacing:-0.01em; color:var(--ink);
+  }
+  .wordmark .sub{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--brass); border:1px solid var(--brass); padding:2px 6px; border-radius:2px;}
+  nav.site-nav{display:flex;gap:26px;align-items:center;}
+  nav.site-nav button{
+    background:none;border:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink);padding:6px 0;border-bottom:2px solid transparent;
+  }
+  nav.site-nav button:hover{border-bottom-color:var(--brass);}
+  .cart-btn{display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--parchment);border:none;padding:8px 14px;border-radius:2px;font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer;letter-spacing:0.04em;}
+  .cart-btn:hover{background:var(--ink-soft);}
+
+  /* HERO */
+  .hero{padding:64px 0 48px;position:relative;overflow:hidden;}
+  .hero-grid{display:grid;grid-template-columns:1.2fr 0.8fr;gap:40px;align-items:end;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--stamp-red);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--stamp-red);}
+  h1.hero-title{
+    font-family:'Fraunces',serif; font-weight:600; font-size:clamp(38px,5.4vw,64px); line-height:1.03; margin:0 0 18px; color:var(--ink); letter-spacing:-0.01em;
+  }
+  h1.hero-title em{font-style:italic;font-weight:500;color:var(--brass);}
+  .hero-desc{font-size:16.5px;line-height:1.6;color:#4a4234;max-width:46ch;margin:0 0 26px;}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn-primary{background:var(--ink);color:var(--parchment);border:none;padding:13px 22px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.04em;cursor:pointer;border-radius:2px;}
+  .btn-primary:hover{background:var(--ink-soft);}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--ink);padding:12px 21px;font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer;border-radius:2px;}
+  .btn-ghost:hover{background:rgba(28,37,65,0.06);}
+
+  /* stamp card decoration in hero */
+  .stamp-card{
+    background:#fff; border:1px solid rgba(43,38,32,0.18); box-shadow:var(--card-shadow);
+    padding:22px 22px 18px; transform:rotate(2.5deg); font-family:'IBM Plex Mono',monospace; position:relative; max-width:280px; margin-left:auto;
+  }
+  .stamp-card::before{content:"";position:absolute;top:-10px;right:22px;width:44px;height:20px;background:rgba(176,141,87,0.35);}
+  .stamp-card .label{font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:#8a7d5f;margin-bottom:10px;}
+  .stamp-card .row{display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-bottom:1px dashed rgba(43,38,32,0.2);}
+  .stamp-card .row:last-child{border-bottom:none;}
+  .stamp-card .row b{color:var(--ink);}
+  .stamp-card .redstamp{position:absolute;bottom:14px;right:14px;border:2px solid var(--stamp-red);color:var(--stamp-red);font-size:9px;letter-spacing:0.08em;padding:4px 8px;transform:rotate(-8deg);border-radius:2px;opacity:0.85;}
+
+  /* SEARCH / FILTER BAR */
+  .toolbar{display:flex;gap:14px;align-items:center;padding:8px 0 26px;flex-wrap:wrap;border-bottom:1px solid rgba(43,38,32,0.12);margin-bottom:34px;}
+  .search-input{
+    flex:1; min-width:220px; background:#fff; border:1px solid rgba(43,38,32,0.25); padding:11px 14px; font-family:'Source Sans 3',sans-serif; font-size:14px; border-radius:2px; color:var(--charcoal);
+  }
+  .search-input:focus{outline:2px solid var(--brass); outline-offset:1px;}
+  select.sort-select{background:#fff;border:1px solid rgba(43,38,32,0.25);padding:11px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;border-radius:2px;color:var(--charcoal);}
+  .count-tag{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8a7d5f;white-space:nowrap;}
+
+  /* CATALOG GRID */
+  section.catalog{padding-bottom:80px;}
+  .catalog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:26px 22px;}
+  .card{
+    background:#fff;border:1px solid rgba(43,38,32,0.14);box-shadow:var(--card-shadow);border-radius:2px;
+    display:flex;flex-direction:column;overflow:hidden;transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .card:hover{transform:translateY(-4px);box-shadow:0 4px 0 rgba(43,38,32,0.08), 0 16px 26px -12px rgba(28,37,65,0.4);}
+  .card .cover{
+    aspect-ratio:3/4; background:linear-gradient(135deg,#e6ded0,#d8cbaa); position:relative; overflow:hidden;
+  }
+  .card .cover img{width:100%;height:100%;object-fit:cover;display:block;}
+  .card .cover .no-img{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-style:italic;color:#9c8f6f;font-size:14px;text-align:center;padding:14px;}
+  .card .price-tag{
+    position:absolute;top:10px;right:10px;background:var(--ink);color:var(--parchment);font-family:'IBM Plex Mono',monospace;font-size:11.5px;padding:5px 9px;border-radius:2px;
+  }
+  .card .body{padding:15px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1;}
+  .card .title{font-family:'Fraunces',serif;font-weight:600;font-size:17px;line-height:1.25;color:var(--ink);}
+  .card .author{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--brass);letter-spacing:0.03em;text-transform:uppercase;}
+  .card .desc{font-size:13px;line-height:1.5;color:#4a4234;flex:1;margin:4px 0 10px;}
+  .card .buy-btn{
+    background:var(--ink);color:var(--parchment);border:none;padding:10px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.04em;cursor:pointer;border-radius:2px;
+  }
+  .card .buy-btn:hover{background:var(--stamp-red);}
+  .empty-state{
+    grid-column:1/-1;text-align:center;padding:60px 20px;font-family:'IBM Plex Mono',monospace;color:#8a7d5f;
+  }
+  .empty-state .big{font-family:'Fraunces',serif;font-style:italic;font-size:22px;color:var(--ink);display:block;margin-bottom:8px;}
+
+  /* MODALS */
+  .overlay{position:fixed;inset:0;background:rgba(28,24,18,0.55);backdrop-filter:blur(2px);display:none;align-items:flex-start;justify-content:center;z-index:100;padding:40px 16px;overflow-y:auto;}
+  .overlay.open{display:flex;}
+  .modal{background:var(--parchment);max-width:480px;width:100%;border:1px solid rgba(43,38,32,0.2);box-shadow:0 24px 60px -12px rgba(0,0,0,0.4);border-radius:2px;padding:28px;position:relative;}
+  .modal.wide{max-width:920px;}
+  .modal-close{position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--ink);line-height:1;padding:6px;}
+  .modal h2{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--ink);margin:0 0 4px;}
+  .modal .modal-sub{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8a7d5f;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:20px;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);margin-bottom:6px;}
+  .field input, .field textarea, .field select{
+    width:100%;background:#fff;border:1px solid rgba(43,38,32,0.25);padding:10px 12px;font-family:'Source Sans 3',sans-serif;font-size:14px;border-radius:2px;color:var(--charcoal);
+  }
+  .field textarea{resize:vertical;min-height:70px;}
+  .field input:focus, .field textarea:focus, .field select:focus{outline:2px solid var(--brass);outline-offset:1px;}
+  .hint{font-size:11.5px;color:#8a7d5f;margin-top:4px;}
+  .form-error{background:rgba(169,68,56,0.1);border:1px solid var(--stamp-red);color:var(--stamp-red);font-size:13px;padding:9px 12px;border-radius:2px;margin-bottom:14px;}
+  .form-success{background:rgba(60,110,80,0.1);border:1px solid #3c6e50;color:#2a5038;font-size:13px;padding:9px 12px;border-radius:2px;margin-bottom:14px;}
+
+  /* CART */
+  .cart-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed rgba(43,38,32,0.2);align-items:center;}
+  .cart-item img{width:48px;height:64px;object-fit:cover;border-radius:2px;background:#e2d8be;}
+  .cart-item .ci-info{flex:1;}
+  .cart-item .ci-title{font-family:'Fraunces',serif;font-weight:600;font-size:14px;color:var(--ink);}
+  .cart-item .ci-price{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--brass);}
+  .cart-item .ci-remove{background:none;border:none;color:var(--stamp-red);font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer;text-decoration:underline;}
+  .cart-total{display:flex;justify-content:space-between;padding-top:14px;margin-top:6px;border-top:1px solid rgba(43,38,32,0.3);font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--ink);}
+
+  /* ADMIN */
+  .admin-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:26px;}
+  @media (max-width:760px){.admin-grid{grid-template-columns:1fr;}}
+  .admin-list{max-height:520px;overflow-y:auto;padding-right:4px;}
+  .admin-row{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid rgba(43,38,32,0.15);padding:9px 10px;border-radius:2px;margin-bottom:8px;}
+  .admin-row img{width:36px;height:48px;object-fit:cover;border-radius:2px;background:#e2d8be;flex-shrink:0;}
+  .admin-row .ar-info{flex:1;min-width:0;}
+  .admin-row .ar-title{font-family:'Fraunces',serif;font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .admin-row .ar-meta{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8a7d5f;}
+  .admin-row .ar-del{background:none;border:none;color:var(--stamp-red);cursor:pointer;font-size:16px;padding:4px 6px;}
+  .file-drop{
+    border:1.5px dashed rgba(43,38,32,0.35);border-radius:2px;padding:16px;text-align:center;background:#fff;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8a7d5f;
+  }
+  .file-drop img{max-height:100px;margin-top:8px;border-radius:2px;}
+  .orders-toggle{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);text-decoration:underline;cursor:pointer;background:none;border:none;padding:0;margin-top:10px;}
+
+  footer.site-footer{border-top:1px solid rgba(43,38,32,0.15);padding:28px 0;margin-top:20px;}
+  .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  .footer-row .fm{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8a7d5f;}
+  .librarian-link{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8a7d5f;background:none;border:none;cursor:pointer;text-decoration:underline;}
+
+  .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(28,37,65,0.2);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  @media (max-width:820px){
+    .hero-grid{grid-template-columns:1fr;}
+    .stamp-card{margin-left:0;transform:rotate(1deg);}
+  }
+</style>
+</head>
+<body class="paper-bg">
+
+<header class="site">
+  <div class="wrap site-bar">
+    <div class="wordmark">
+      <span class="mark">Varaq</span>
+      <span class="sub">Kitob do'koni</span>
+    </div>
+    <nav class="site-nav">
+      <button onclick="scrollToCatalog()">Katalog</button>
+      <button onclick="openLibrarianGate()">Kutubxonachi</button>
+      <button class="cart-btn" onclick="openCart()">
+        Savat <span id="cartCount">(0)</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Yangi kelgan nusxalar</div>
+      <h1 class="hero-title">Har bir jild — <em>bir dunyo</em> ochadi</h1>
+      <p class="hero-desc">Diqqat bilan tanlangan kitoblar to'plami. Har bir nusxaning qisqa tavsifi, narxi va rasmi bilan — o'zingizga yoqqanini savatga qo'shing.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="scrollToCatalog()">Katalogni ko'rish</button>
+        <button class="btn-ghost" onclick="openLibrarianGate()">Kitob qo'shish</button>
+      </div>
+    </div>
+    <div class="stamp-card">
+      <div class="label">Kutubxona kartochkasi</div>
+      <div class="row"><span>Holati</span><b id="stampCount">— nusxa</b></div>
+      <div class="row"><span>Bo'lim</span><b>Bosh javon</b></div>
+      <div class="row"><span>Yangilandi</span><b id="stampDate">—</b></div>
+      <div class="redstamp">MAVJUD</div>
+    </div>
+  </div>
+</section>
+
+<main class="wrap" id="catalogAnchor">
+  <div class="toolbar">
+    <input class="search-input" id="searchInput" type="text" placeholder="Nomi yoki muallif bo'yicha qidirish..." oninput="renderCatalog()">
+    <select class="sort-select" id="sortSelect" onchange="renderCatalog()">
+      <option value="new">Yangilari birinchi</option>
+      <option value="price-asc">Narx: arzondan qimmatga</option>
+      <option value="price-desc">Narx: qimmatdan arzonga</option>
+      <option value="title">Nomi bo'yicha (A-Z)</option>
+    </select>
+    <span class="count-tag" id="resultCount"></span>
+  </div>
+
+  <section class="catalog">
+    <div class="catalog-grid" id="catalogGrid">
+      <div class="empty-state"><span class="big">Yuklanmoqda…</span><span class="spinner"></span></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <span class="fm">© Varaq kitob do'koni — namunaviy sayt</span>
+    <button class="librarian-link" onclick="openLibrarianGate()">Kutubxonachi kirishi</button>
+  </div>
+</footer>
+
+<!-- CART MODAL -->
+<div class="overlay" id="cartOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('cartOverlay')">×</button>
+    <h2>Savat</h2>
+    <div class="modal-sub">Tanlangan kitoblar</div>
+    <div id="cartItems"></div>
+    <div class="cart-total"><span>Jami</span><span id="cartTotal">0 so'm</span></div>
+    <div style="margin-top:18px;">
+      <button class="btn-primary" style="width:100%" onclick="openCheckout()">Buyurtmani rasmiylashtirish</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="overlay" id="checkoutOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('checkoutOverlay')">×</button>
+    <h2>Buyurtma</h2>
+    <div class="modal-sub">Ma'lumotlaringizni qoldiring, siz bilan bog'lanamiz</div>
+    <div id="checkoutMsg"></div>
+    <form id="checkoutForm" onsubmit="submitOrder(event)">
+      <div class="field"><label>Ism-familiya</label><input type="text" id="ordName" required></div>
+      <div class="field"><label>Telefon raqami</label><input type="tel" id="ordPhone" placeholder="+998 90 123 45 67" required></div>
+      <div class="field"><label>Yetkazish manzili</label><textarea id="ordAddress" required></textarea></div>
+      <button class="btn-primary" style="width:100%" type="submit">Buyurtmani tasdiqlash</button>
+      <p class="hint">Bu — namunaviy sayt hozircha buyurtma so'rovi sifatida saqlanadi.</p>
+    </form>
+  </div>
+</div>
+
+<!-- LIBRARIAN PASSWORD GATE -->
+<div class="overlay" id="gateOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('gateOverlay')">×</button>
+    <h2>Kutubxonachi kirishi</h2>
+    <div class="modal-sub">Admin panelga kirish uchun parol kiriting</div>
+    <div id="gateMsg"></div>
+    <form onsubmit="checkPassword(event)">
+      <div class="field"><label>Parol</label><input type="password" id="gatePassword" autofocus></div>
+      <button class="btn-primary" style="width:100%" type="submit">Kirish</button>
+      <p class="hint">Admin KIADI HOLOS</p>
+    </form>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="overlay" id="adminOverlay">
+  <div class="modal wide">
+    <button class="modal-close" onclick="closeModal('adminOverlay')">×</button>
+    <h2>Kutubxonachi paneli</h2>
+    <div class="modal-sub">Kitob qo'shish, tahrirlash va buyurtmalarni ko'rish</div>
+    <div class="admin-grid">
+      <div>
+        <label style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);display:block;margin-bottom:8px;">Mavjud kitoblar (<span id="adminBookCount">0</span>)</label>
+        <div class="admin-list" id="adminList"></div>
+        <button class="orders-toggle" onclick="toggleOrders()">Buyurtmalarni ko'rsatish / yashirish</button>
+        <div class="admin-list" id="ordersList" style="display:none;margin-top:10px;"></div>
+      </div>
+      <div>
+        <div id="adminFormMsg"></div>
+        <form id="bookForm" onsubmit="submitBook(event)">
+          <div class="field"><label>Kitob nomi</label><input type="text" id="bTitle" required></div>
+          <div class="field"><label>Muallif</label><input type="text" id="bAuthor" required></div>
+          <div class="field"><label>Qisqa tavsif</label><textarea id="bDesc" maxlength="220" required></textarea></div>
+          <div class="field"><label>Narxi (so'm)</label><input type="number" id="bPrice" min="0" step="1000" required></div>
+          <div class="field">
+            <label>Muqova rasmi</label>
+            <div class="file-drop" id="fileDrop" onclick="document.getElementById('bImage').click()">
+              <span id="fileDropText">Rasmni tanlash uchun bosing (JPG/PNG)</span>
+              <input type="file" id="bImage" accept="image/*" style="display:none" onchange="handleImageSelect(event)">
+              <div id="imgPreviewWrap"></div>
+            </div>
+          </div>
+          <input type="hidden" id="bEditId">
+          <button class="btn-primary" style="width:100%" type="submit" id="bookSubmitBtn">Kitobni qo'shish</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let books = [];
+let cart = [];
+let editingImageDataUrl = null;
+const ADMIN_PASSWORD = "7579";
+let isLibrarian = false;
+
+// Baza faqat joriy sessiya davomida saqlanadi.
+const hasStorage = (typeof window !== 'undefined') && !!window.storage;
+let memoryOrders = [];
+
+function fmtPrice(n){ return Number(n).toLocaleString('ru-RU') + " so'm"; }
+
+function showStorageWarning(){
+  const el = document.getElementById('adminFormMsg');
+  if(el && !document.getElementById('storageWarnBanner')){
+    el.insertAdjacentHTML('beforebegin', `<div id="storageWarnBanner" class="form-error">Diqqat: doimiy saqlash tizimi topilmadi . Qo'shgan kitoblaringiz shu sessiya davomida ko'rinadi, lekin sahifani qayta ochganda saqlanmaydi.</div>`);
+  }
+}
+
+async function loadBooks(){
+  if(!hasStorage){
+    books = [];
+    renderCatalog(); renderAdminList();
+    document.getElementById('stampCount').textContent = books.length + " nusxa";
+    document.getElementById('stampDate').textContent = new Date().toLocaleDateString('uz-UZ');
+    return;
+  }
+  try{
+    const res = await window.storage.get('bookstore:books', true);
+    books = res && res.value ? JSON.parse(res.value) : [];
+  }catch(e){
+    books = [];
+  }
+  renderCatalog();
+  renderAdminList();
+  document.getElementById('stampCount').textContent = books.length + " nusxa";
+  document.getElementById('stampDate').textContent = new Date().toLocaleDateString('uz-UZ');
+}
+
+async function saveBooks(){
+  if(!hasStorage){
+    showStorageWarning();
+    return; // kitob 'books' massivida xotirada qoladi, faqat serverga yozilmaydi
+  }
+  await window.storage.set('bookstore:books', JSON.stringify(books), true);
+}
+
+async function loadOrders(){
+  if(!hasStorage) return memoryOrders;
+  try{
+    const res = await window.storage.get('bookstore:orders', true);
+    return res && res.value ? JSON.parse(res.value) : [];
+  }catch(e){ return []; }
+}
+async function saveOrders(orders){
+  if(!hasStorage){ memoryOrders = orders; showStorageWarning(); return; }
+  await window.storage.set('bookstore:orders', JSON.stringify(orders), true);
+}
+
+function renderCatalog(){
+  const grid = document.getElementById('catalogGrid');
+  const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  const sort = document.getElementById('sortSelect').value;
+  let list = books.filter(b => !q || b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q));
+
+  if(sort === 'price-asc') list = [...list].sort((a,b)=>a.price-b.price);
+  else if(sort === 'price-desc') list = [...list].sort((a,b)=>b.price-a.price);
+  else if(sort === 'title') list = [...list].sort((a,b)=>a.title.localeCompare(b.title,'uz'));
+  else list = [...list].sort((a,b)=> (b.createdAt||0) - (a.createdAt||0));
+
+  document.getElementById('resultCount').textContent = list.length + " ta kitob";
+
+  if(list.length === 0){
+    grid.innerHTML = `<div class="empty-state"><span class="big">Hozircha kitob yo'q</span>Kutubxonachi panelidan yangi nusxa qo'shing.</div>`;
+    return;
+  }
+  grid.innerHTML = list.map(b => `
+    <div class="card">
+      <div class="cover">
+        ${b.image ? `<img src="${b.image}" alt="${escapeHtml(b.title)}">` : `<div class="no-img">Muqova yo'q</div>`}
+        <div class="price-tag">${fmtPrice(b.price)}</div>
+      </div>
+      <div class="body">
+        <div class="title">${escapeHtml(b.title)}</div>
+        <div class="author">${escapeHtml(b.author)}</div>
+        <div class="desc">${escapeHtml(b.description)}</div>
+        <button class="buy-btn" onclick="addToCart('${b.id}')">Savatga qo'shish</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escapeHtml(s){
+  const d = document.createElement('div');
+  d.textContent = s == null ? '' : s;
+  return d.innerHTML;
+}
+
+function scrollToCatalog(){
+  document.getElementById('catalogAnchor').scrollIntoView({behavior:'smooth'});
+}
+
+/* CART */
+function addToCart(id){
+  const book = books.find(b=>b.id===id);
+  if(!book) return;
+  const existing = cart.find(c=>c.id===id);
+  if(existing) existing.qty += 1;
+  else cart.push({id, title:book.title, price:book.price, image:book.image, qty:1});
+  updateCartCount();
+  openCart();
+}
+function removeFromCart(id){
+  cart = cart.filter(c=>c.id!==id);
+  updateCartCount();
+  renderCart();
+}
+function updateCartCount(){
+  const total = cart.reduce((s,c)=>s+c.qty,0);
+  document.getElementById('cartCount').textContent = `(${total})`;
+}
+function openCart(){
+  renderCart();
+  document.getElementById('cartOverlay').classList.add('open');
+}
+function renderCart(){
+  const wrap = document.getElementById('cartItems');
+  if(cart.length===0){
+    wrap.innerHTML = `<p class="hint">Savat bo'sh. Katalogdan kitob tanlang.</p>`;
+  } else {
+    wrap.innerHTML = cart.map(c=>`
+      <div class="cart-item">
+        ${c.image ? `<img src="${c.image}">` : `<img src="">`}
+        <div class="ci-info">
+          <div class="ci-title">${escapeHtml(c.title)} ${c.qty>1?`× ${c.qty}`:''}</div>
+          <div class="ci-price">${fmtPrice(c.price * c.qty)}</div>
+        </div>
+        <button class="ci-remove" onclick="removeFromCart('${c.id}')">olib tashlash</button>
+      </div>
+    `).join('');
+  }
+  const total = cart.reduce((s,c)=>s + c.price*c.qty, 0);
+  document.getElementById('cartTotal').textContent = fmtPrice(total);
+}
+function openCheckout(){
+  if(cart.length===0) return;
+  closeModal('cartOverlay');
+  document.getElementById('checkoutOverlay').classList.add('open');
+}
+async function submitOrder(e){
+  e.preventDefault();
+  const order = {
+    id: 'ord_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+    name: document.getElementById('ordName').value,
+    phone: document.getElementById('ordPhone').value,
+    address: document.getElementById('ordAddress').value,
+    items: cart,
+    total: cart.reduce((s,c)=>s+c.price*c.qty,0),
+    createdAt: Date.now()
+  };
+  try{
+    const orders = await loadOrders();
+    orders.push(order);
+    await saveOrders(orders);
+    document.getElementById('checkoutMsg').innerHTML = `<div class="form-success">Buyurtmangiz qabul qilindi! Tez orada siz bilan bog'lanamiz.</div>`;
+    cart = [];
+    updateCartCount();
+    document.getElementById('checkoutForm').reset();
+    setTimeout(()=>{ closeModal('checkoutOverlay'); document.getElementById('checkoutMsg').innerHTML=''; }, 1800);
+  }catch(err){
+    document.getElementById('checkoutMsg').innerHTML = `<div class="form-error">Xatolik yuz berdi, qayta urinib ko'ring.</div>`;
+  }
+}
+
+/* LIBRARIAN GATE */
+function openLibrarianGate(){
+  if(isLibrarian){ openAdmin(); return; }
+  document.getElementById('gateOverlay').classList.add('open');
+}
+function checkPassword(e){
+  e.preventDefault();
+  const val = document.getElementById('gatePassword').value;
+  if(val === ADMIN_PASSWORD){
+    isLibrarian = true;
+    closeModal('gateOverlay');
+    document.getElementById('gatePassword').value='';
+    document.getElementById('gateMsg').innerHTML='';
+    openAdmin();
+  } else {
+    document.getElementById('gateMsg').innerHTML = `<div class="form-error">Parol noto'g'ri.</div>`;
+  }
+}
+function openAdmin(){
+  renderAdminList();
+  document.getElementById('adminOverlay').classList.add('open');
+}
+
+/* ADMIN: image handling */
+function handleImageSelect(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    const img = new Image();
+    img.onload = function(){
+      const canvas = document.createElement('canvas');
+      const maxW = 500;
+      const scale = Math.min(1, maxW / img.width);
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      editingImageDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+      document.getElementById('imgPreviewWrap').innerHTML = `<br><img src="${editingImageDataUrl}">`;
+      document.getElementById('fileDropText').textContent = "Rasm tanlandi — o'zgartirish uchun qayta bosing";
+    };
+    img.src = evt.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ADMIN: book form */
+async function submitBook(e){
+  e.preventDefault();
+  const editId = document.getElementById('bEditId').value;
+  const title = document.getElementById('bTitle').value.trim();
+  const author = document.getElementById('bAuthor').value.trim();
+  const description = document.getElementById('bDesc').value.trim();
+  const price = Number(document.getElementById('bPrice').value);
+
+  if(!title || !author || !description || isNaN(price)){
+    document.getElementById('adminFormMsg').innerHTML = `<div class="form-error">Barcha maydonlarni to'ldiring.</div>`;
+    return;
+  }
+
+  if(editId){
+    const idx = books.findIndex(b=>b.id===editId);
+    if(idx>-1){
+      books[idx] = {...books[idx], title, author, description, price, image: editingImageDataUrl || books[idx].image};
+    }
+  } else {
+    books.push({
+      id: 'book_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+      title, author, description, price,
+      image: editingImageDataUrl || null,
+      createdAt: Date.now()
+    });
+  }
+
+  try{
+    await saveBooks();
+    document.getElementById('adminFormMsg').innerHTML = `<div class="form-success">Saqlandi.</div>`;
+    resetBookForm();
+    renderCatalog();
+    renderAdminList();
+    setTimeout(()=>{ document.getElementById('adminFormMsg').innerHTML=''; }, 1500);
+  }catch(err){
+    document.getElementById('adminFormMsg').innerHTML = `<div class="form-error">Saqlashda xatolik yuz berdi.</div>`;
+  }
+}
+
+function resetBookForm(){
+  document.getElementById('bookForm').reset();
+  document.getElementById('bEditId').value = '';
+  document.getElementById('imgPreviewWrap').innerHTML = '';
+  document.getElementById('fileDropText').textContent = "Rasmni tanlash uchun bosing (JPG/PNG)";
+  document.getElementById('bookSubmitBtn').textContent = "Kitobni qo'shish";
+  editingImageDataUrl = null;
+}
+
+function editBook(id){
+  const b = books.find(x=>x.id===id);
+  if(!b) return;
+  document.getElementById('bEditId').value = b.id;
+  document.getElementById('bTitle').value = b.title;
+  document.getElementById('bAuthor').value = b.author;
+  document.getElementById('bDesc').value = b.description;
+  document.getElementById('bPrice').value = b.price;
+  editingImageDataUrl = b.image;
+  document.getElementById('imgPreviewWrap').innerHTML = b.image ? `<br><img src="${b.image}">` : '';
+  document.getElementById('bookSubmitBtn').textContent = "O'zgarishlarni saqlash";
+}
+
+async function deleteBook(id){
+  if(!confirm("Ushbu kitobni o'chirishni tasdiqlaysizmi?")) return;
+  books = books.filter(b=>b.id!==id);
+  await saveBooks();
+  renderCatalog();
+  renderAdminList();
+}
+
+function renderAdminList(){
+  const wrap = document.getElementById('adminList');
+  document.getElementById('adminBookCount').textContent = books.length;
+  if(books.length === 0){
+    wrap.innerHTML = `<p class="hint">Hozircha kitob qo'shilmagan.</p>`;
+    return;
+  }
+  wrap.innerHTML = [...books].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).map(b=>`
+    <div class="admin-row">
+      ${b.image ? `<img src="${b.image}">` : `<img src="">`}
+      <div class="ar-info">
+        <div class="ar-title">${escapeHtml(b.title)}</div>
+        <div class="ar-meta">${escapeHtml(b.author)} · ${fmtPrice(b.price)}</div>
+      </div>
+      <button class="ci-remove" style="border:none;background:none;color:var(--ink-soft);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;" onclick="editBook('${b.id}')">tahrirlash</button>
+      <button class="ar-del" onclick="deleteBook('${b.id}')">×</button>
+    </div>
+  `).join('');
+}
+
+async function toggleOrders(){
+  const el = document.getElementById('ordersList');
+  if(el.style.display === 'none'){
+    const orders = await loadOrders();
+    if(orders.length === 0){
+      el.innerHTML = `<p class="hint">Hozircha buyurtma yo'q.</p>`;
+    } else {
+      el.innerHTML = [...orders].reverse().map(o=>`
+        <div class="admin-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <div class="ar-title">${escapeHtml(o.name)} — ${escapeHtml(o.phone)}</div>
+          <div class="ar-meta">${escapeHtml(o.address)}</div>
+          <div class="ar-meta">${o.items.map(i=>escapeHtml(i.title)+' ×'+i.qty).join(', ')}</div>
+          <div class="ar-meta">Jami: ${fmtPrice(o.total)} · ${new Date(o.createdAt).toLocaleString('uz-UZ')}</div>
+        </div>
+      `).join('');
+    }
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+  if(id === 'adminOverlay') resetBookForm();
+}
+
+document.querySelectorAll('.overlay').forEach(ov=>{
+  ov.addEventListener('click', (e)=>{ if(e.target === ov) closeModal(ov.id); });
+});
+
+loadBooks();
+</script>
+</body>
+</html>
